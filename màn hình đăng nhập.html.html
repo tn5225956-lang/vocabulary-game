@@ -1,0 +1,706 @@
+<img class="chicken-spin-animated" src="yellow-chicken.png" alt="Chicken">
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Master - Educational Games For Everyone</title>
+    <meta property="og:site_name" content="Vocabulary Master">
+    <meta name="description" content="Trò chơi học từ vựng tiếng Anh Vocabulary Master vui nhộn, miễn phí cho mọi người.">
+
+    <style>
+        /* --- RESET & MÀU SẮC CHỦ ĐẠO VOCAB MASTER --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        :root {
+            --vm-cyan: #00bece;       /* Xanh ngọc Vocab Master */
+            --vm-cyan-dark: #008fa0;  /* Xanh đậm tạo khối 3D */
+            --vm-yellow: #fdcb6e;     /* Vàng tươi */
+            --vm-purple: #6c5ce7;     /* Tím */
+            --vm-blue: #0984e3;       /* Xanh biển */
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            background-color: #ffffff; /* Nền trắng tinh */
+            color: #2d3436;
+        }
+
+        /* --- 1. NAVBAR (CỐ ĐỊNH + ĐƯỜNG VIỀN XÁM KHI CUỘN) --- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 50px;
+            background-color: #ffffff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9999;
+            border-bottom: 2px solid transparent; 
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .navbar.scrolled {
+            border-bottom: 2px solid #e0e0e0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+        }
+
+        .logo-box {
+            background-color: var(--vm-cyan);
+            color: white;
+            font-size: 28px;
+            font-weight: 900;
+            padding: 10px 28px;
+            border-radius: 16px;
+            box-shadow: 0px 6px 0px var(--vm-cyan-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .logo-box:hover {
+            transform: scale(1.04);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        /* Nút 3D */
+        .btn-3d {
+            font-weight: 800;
+            font-size: 17px;
+            border: none;
+            border-radius: 14px;
+            padding: 12px 26px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .play-svg {
+            width: 22px;
+            height: 22px;
+            fill: var(--vm-cyan);
+            transition: transform 0.2s ease;
+        }
+
+        .btn-join {
+            background-color: #ffffff;
+            color: var(--vm-cyan);
+            border: 2px solid #cbebfe;
+            box-shadow: 0px 5px 0px #bce3fb;
+        }
+
+        .btn-join:hover .play-svg {
+            transform: scale(1.15);
+        }
+
+        .btn-login {
+            background-color: #f1f2f6;
+            color: #4b6584;
+            box-shadow: 0px 5px 0px #d1d8e0;
+        }
+
+        .btn-cyan {
+            background-color: var(--vm-cyan);
+            color: white;
+            box-shadow: 0px 6px 0px var(--vm-cyan-dark);
+        }
+
+        .btn-3d:active {
+            transform: translateY(4px);
+            box-shadow: 0px 0px 0px transparent !important;
+        }
+
+        /* --- 2. HERO SECTION & ANIMATIONS --- */
+        .hero-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1150px;
+            margin: 120px auto 20px auto; 
+            padding: 0 20px;
+        }
+
+        .hero-text {
+            text-align: center;
+            max-width: 550px;
+        }
+
+        .hero-text h1 {
+            font-size: 42px;
+            font-weight: 900;
+            color: #2d3436;
+            margin-bottom: 25px;
+            line-height: 1.25;
+        }
+
+        .btn-signup-main {
+            font-size: 22px;
+            padding: 16px 45px;
+            width: 100%;
+            max-width: 320px;
+            margin-bottom: 10px;
+        }
+
+        .subtext {
+            font-size: 14px;
+            color: #b2bec3;
+            font-weight: 700;
+        }
+
+        .mascot-img {
+            max-width: 210px;
+            height: auto;
+            filter: drop-shadow(0px 8px 15px rgba(0,0,0,0.08));
+            cursor: pointer;
+        }
+
+        /* KEYFRAMES ANIMATION */
+        @keyframes jump-pig {
+            0%, 100% { transform: translateY(0) scale(1, 1); }
+            40% { transform: translateY(-28px) scale(0.92, 1.08); }
+            50% { transform: translateY(-30px) scale(0.9, 1.1); }
+            85% { transform: translateY(0) scale(1.08, 0.92); }
+        }
+
+        @keyframes float-left {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(-4deg); }
+        }
+
+        @keyframes float-right {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-18px) rotate(4deg); }
+        }
+
+        @keyframes pulse-icon {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08) translateY(-6px); }
+        }
+
+        /* ANIMATION CHUẨN CHO CON GÀ: CÂN BẰNG, KHÔNG BỊ MÉO LỆCH */
+        @keyframes chicken-jump-spin {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(1, 1);
+            }
+            15% {
+                transform: translateY(6px) rotate(0deg) scale(1.08, 0.92);
+            }
+            35% {
+                transform: translateY(-45px) rotate(120deg) scale(0.95, 1.05);
+            }
+            60% {
+                transform: translateY(-45px) rotate(360deg) scale(1, 1);
+            }
+            80% {
+                transform: translateY(0) rotate(360deg) scale(1.06, 0.94);
+            }
+            90%, 100% {
+                transform: translateY(0) rotate(360deg) scale(1, 1);
+            }
+        }
+
+        .mascot-float-left { animation: float-left 3.5s ease-in-out infinite; }
+        .mascot-float-right { animation: float-right 4s ease-in-out infinite 0.5s; }
+        .pig-animated { animation: jump-pig 1.8s ease-in-out infinite; transform-origin: bottom center; }
+        .analytics-animated { animation: pulse-icon 3s ease-in-out infinite; }
+        
+        .chicken-spin-animated {
+            animation: chicken-jump-spin 2.2s ease-in-out infinite;
+            transform-origin: center bottom;
+        }
+
+        .scroll-down-arrow {
+            text-align: center;
+            margin: 20px 0 50px 0;
+            color: var(--vm-cyan);
+            font-size: 26px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        /* --- 3. FEATURES SECTIONS --- */
+        .feature-container {
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .feature-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 60px;
+            gap: 40px;
+            background: #ffffff;
+            padding: 35px 40px;
+            border-radius: 24px;
+            border: 2px solid #f0f3f6;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-row:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 15px 30px rgba(0, 190, 206, 0.1);
+        }
+        
+        .feature-row.reverse { flex-direction: row-reverse; }
+
+        .feature-text h2 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #2d3436;
+            margin-bottom: 12px;
+        }
+
+        .feature-text p {
+            font-size: 16px;
+            color: #636e72;
+            line-height: 1.6;
+        }
+
+        .feature-media img {
+            max-width: 180px;
+            height: auto;
+            filter: drop-shadow(0px 8px 12px rgba(0,0,0,0.08));
+        }
+
+        /* --- 4. PURPLE BANNER --- */
+        .purple-banner {
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+            margin: 40px auto 60px auto;
+            border-radius: 30px;
+            max-width: 1050px;
+            box-shadow: 0 15px 35px rgba(108, 92, 231, 0.2);
+        }
+
+        .purple-banner h2 { font-size: 36px; font-weight: 900; margin-bottom: 12px; }
+        .purple-banner p { font-size: 18px; margin-bottom: 25px; opacity: 0.95; }
+
+        /* --- 5. HOW IT WORKS --- */
+        .how-it-works { text-align: center; margin-bottom: 60px; }
+        .how-it-works h2 {
+            font-size: 30px;
+            font-weight: 900;
+            color: #2d3436;
+            background: #e1f5f7;
+            display: inline-block;
+            padding: 8px 25px;
+            border-radius: 12px;
+            margin-bottom: 35px;
+        }
+
+        .steps-grid {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .step-card {
+            flex: 1;
+            background: #ffffff;
+            padding: 25px 20px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            border: 2px solid #eef2f5;
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .step-card:hover { transform: translateY(-8px); }
+        .step-card > img { width: 90px; height: 90px; object-fit: contain; margin-bottom: 15px; }
+        .step-card h3 { font-size: 16px; font-weight: 800; color: var(--vm-cyan); margin-top: auto; }
+
+        /* --- MINIGAME PREVIEW --- */
+        .mini-game-preview {
+            background: #2d1d45;
+            border-radius: 14px;
+            padding: 10px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+            max-width: 180px;
+            margin: 0 auto 15px auto;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
+        }
+
+        .mini-game-row {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .mini-circle-img {
+            width: 40px;
+            height: 40px;
+            background: #ffffff;
+            border: 2px solid #90caf9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .mini-circle-img img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+        }
+
+        .mini-circle-txt {
+            width: 40px;
+            height: 40px;
+            background: #c2c9d6;
+            border: 1.5px dashed #8fa0b5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            font-weight: 900;
+            color: #2d3436;
+        }
+
+        /* --- 6. ANIMATED OCEAN FOOTER --- */
+        .ocean-footer {
+            position: relative;
+            background-color: var(--vm-blue);
+            margin-top: 120px;
+        }
+
+        .waves-container {
+            position: absolute;
+            top: -100px;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            overflow: hidden;
+        }
+
+        .waves {
+            position: relative;
+            width: 100%;
+            height: 100px;
+            margin-bottom: -7px;
+        }
+
+        .parallax > use {
+            animation: move-forever 25s cubic-bezier(.55,.5,.45,.5) infinite;
+        }
+        .parallax > use:nth-child(1) { animation-delay: -2s; animation-duration: 7s; }
+        .parallax > use:nth-child(2) { animation-delay: -3s; animation-duration: 10s; }
+        .parallax > use:nth-child(3) { animation-delay: -4s; animation-duration: 13s; }
+        .parallax > use:nth-child(4) { animation-delay: -5s; animation-duration: 20s; }
+
+        @keyframes move-forever {
+            0% { transform: translate3d(-90px, 0, 0); }
+            100% { transform: translate3d(85px, 0, 0); }
+        }
+
+        .footer-content {
+            background-color: var(--vm-blue);
+            padding: 40px 40px 60px 40px;
+            color: white;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-col h4 { font-size: 18px; font-weight: 800; margin-bottom: 15px; color: #74b9ff; }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 10px; font-size: 14px; opacity: 0.85; cursor: pointer; }
+        .footer-col ul li:hover { opacity: 1; text-decoration: underline; }
+
+        /* --- 7. MAIN APP GAME --- */
+        #main-app {
+            display: none;
+            padding: 100px 40px 40px 40px;
+            text-align: center;
+        }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+</head>
+
+<body>
+
+    <div id="landing-page">
+        
+        <!-- NAVBAR -->
+        <header class="navbar" id="navbar">
+            <div class="logo-box">Vocab Master</div>
+            <div class="nav-buttons">
+                <button class="btn-3d btn-join" onclick="loginWithGoogle()">
+                    <svg class="play-svg" viewBox="0 0 24 24">
+                        <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86a1 1 0 0 0-1.5.86z"/>
+                    </svg>
+                    <span>Vào chơi ngay</span>
+                </button>
+                <button class="btn-3d btn-login" onclick="loginWithGoogle()">Đăng nhập</button>
+            </div>
+        </header>
+
+        <!-- HERO SECTION -->
+        <section class="hero-section">
+            <div class="hero-media">
+                <img class="mascot-img mascot-float-left" src="https://cdn-icons-png.flaticon.com/512/3408/3408506.png" alt="Owl Mascot">
+            </div>
+
+            <div class="hero-text">
+                <h1>Educational games for everyone!</h1>
+                <button class="btn-3d btn-cyan btn-signup-main" onclick="loginWithGoogle()">Đăng ký miễn phí</button>
+                <div class="subtext">🔊 Phát âm: ("Vocab-Master")</div>
+            </div>
+
+            <div class="hero-media">
+                <img class="mascot-img mascot-float-right" src="https://cdn-icons-png.flaticon.com/512/4342/4342621.png" alt="Chicks Mascot">
+            </div>
+        </section>
+
+        <div class="scroll-down-arrow">▼</div>
+
+        <!-- KHỐI GIỚI THIỆU TÍNH NĂNG -->
+        <div class="feature-container">
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h2>Dễ dàng thiết lập, kết quả lâu dài</h2>
+                    <p>Chọn bộ câu hỏi có sẵn hoặc tự tạo bộ từ vựng riêng. Bắt đầu trò chơi chỉ trong vài cú nhấp chuột!</p>
+                </div>
+                <div class="feature-media">
+                    <img class="pig-animated" src="https://cdn-icons-png.flaticon.com/512/2641/2641409.png" alt="Animated Pig Mascot">
+                </div>
+            </div>
+
+            <div class="feature-row reverse">
+                <div class="feature-text">
+                    <h2>Phản hồi tức thì</h2>
+                    <p>Theo dõi tiến độ học tập qua báo cáo chi tiết sau mỗi màn chơi. Xác định lỗ hổng kiến thức nhanh chóng.</p>
+                </div>
+                <div class="feature-media">
+                    <img class="analytics-animated" src="https://cdn-icons-png.flaticon.com/512/3588/3588658.png" alt="Animated Analytics">
+                </div>
+            </div>
+
+            <!-- CHÚ GÀ BLOOKET NHẢY TỰ NHIÊN CÂN BẰNG -->
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h2>Miễn phí, tươi mới và thú vị</h2>
+                    <p>Giữ hứng thú học tập với kho chế độ chơi liên tục mở rộng. Học tiếng Anh chưa bao giờ vui đến thế!</p>
+                </div>
+                <div class="feature-media">
+                    <img class="chicken-spin-animated" src="https://ac.blooket.com/blooks/chicken.png" alt="Blooket Chicken Mascot">
+                </div>
+            </div>
+        </div>
+
+        <!-- BANNER TÍM -->
+        <section class="purple-banner">
+            <h2>Học tập nghiêm túc. Vui chơi thỏa thích.</h2>
+            <p>Tham gia cùng hàng triệu người học trên toàn thế giới khám phá Vocab Master!</p>
+            <button class="btn-3d btn-cyan" style="font-size: 20px; padding: 12px 35px; background: #ffffff; color: var(--vm-purple);" onclick="loginWithGoogle()">Bắt đầu ngay</button>
+        </section>
+
+        <!-- HOW IT WORKS -->
+        <section class="how-it-works">
+            <h2>Cách thức hoạt động</h2>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <img class="wizard-animated" src="https://cdn-icons-png.flaticon.com/512/2991/2991108.png" alt="Step 1">
+                    <h3>1. Chọn bộ từ vựng</h3>
+                </div>
+
+                <div class="step-card">
+                    <div class="mini-game-preview">
+                        <div class="mini-game-row">
+                            <div class="mini-circle-img">
+                                <img src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f42c.svg" alt="Dolphin">
+                            </div>
+                            <div class="mini-circle-img">
+                                <img src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f428.svg" alt="Koala">
+                            </div>
+                            <div class="mini-circle-img">
+                                <img src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f986.svg" alt="Duck">
+                            </div>
+                        </div>
+                        <div class="mini-game-row">
+                            <div class="mini-circle-txt">Koala</div>
+                            <div class="mini-circle-txt">Duck</div>
+                            <div class="mini-circle-txt">Dolphin</div>
+                        </div>
+                    </div>
+                    <h3>2. Chọn chế độ chơi</h3>
+                </div>
+
+                <div class="step-card">
+                    <img class="analytics-animated" src="https://cdn-icons-png.flaticon.com/512/1533/1533913.png" alt="Step 3">
+                    <h3>3. Chơi & Luyện nhớ</h3>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER SÓNG BIỂN ĐỘNG -->
+        <footer class="ocean-footer">
+            <div class="waves-container">
+                <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+                    <defs>
+                        <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+                    </defs>
+                    <g class="parallax">
+                        <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(0, 190, 206, 0.7)" />
+                        <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(108, 92, 231, 0.5)" />
+                        <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(253, 203, 110, 0.3)" />
+                        <use xlink:href="#gentle-wave" x="48" y="7" fill="#0984e3" />
+                    </g>
+                </svg>
+            </div>
+
+            <div class="footer-content">
+                <div class="footer-col">
+                    <h4>Sản phẩm</h4>
+                    <ul>
+                        <li>Nâng cấp</li>
+                        <li>Gói dành cho nhóm</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Liên hệ</h4>
+                    <ul>
+                        <li>Trung tâm trợ giúp</li>
+                        <li>Câu hỏi thường gặp</li>
+                        <li>contact@vocabmaster.app</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Hơn nữa</h4>
+                    <ul>
+                        <li>Chính sách bảo mật</li>
+                        <li>Điều khoản dịch vụ</li>
+                        <li>Cài đặt cookie</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Kết nối</h4>
+                    <ul>
+                        <li>Facebook</li>
+                        <li>Instagram</li>
+                        <li>YouTube</li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- MAIN APP GAME -->
+    <div id="main-app">
+        <header class="navbar" style="border-bottom: 2px solid #e0e0e0;">
+            <div class="logo-box" style="font-size: 20px; padding: 6px 16px;">Vocab Master</div>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <img id="user-photo" src="" style="width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--vm-cyan);" alt="Avatar">
+                <span id="user-name" style="font-weight: bold;"></span>
+                <button class="btn-3d" style="background: #ff4757; color: white;" onclick="logout()">Đăng xuất</button>
+            </div>
+        </header>
+
+        <main style="margin-top: 50px;">
+            <h1 style="font-size: 36px; color: var(--vm-cyan);">🎉 CHÀO MỪNG BẠN ĐÃ VÀO GAME!</h1>
+            <p style="margin-top: 15px; font-size: 18px; color: #636e72;">Phần game từ vựng của bạn ở đây.</p>
+        </main>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        const navbar = document.querySelector('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 10) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Firebase SDK
+        const firebaseConfig = {
+            apiKey: "AIzaSyYOUR_API_KEY_HERE",
+            authDomain: "vocabularyminigame.firebaseapp.com",
+            projectId: "vocabularyminigame",
+            storageBucket: "vocabularyminigame.appspot.com",
+            messagingSenderId: "1234567890",
+            appId: "1:1234567890:web:abcdef123456"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const googleProvider = new firebase.auth.GoogleAuthProvider();
+
+        function loginWithGoogle() {
+            if (window.location.protocol === 'file:') {
+                alert("Bạn đang mở file trực tiếp trên máy tính! Vui lòng đẩy code lên GitHub để chạy trên Netlify (HTTPS) thì đăng nhập Google mới hoạt động nhé.");
+                return;
+            }
+
+            auth.signInWithPopup(googleProvider).catch((err) => {
+                alert("Lỗi đăng nhập: " + err.message);
+            });
+        }
+
+        function logout() {
+            auth.signOut();
+        }
+
+        auth.onAuthStateChanged((user) => {
+            const landingPage = document.getElementById('landing-page');
+            const mainApp = document.getElementById('main-app');
+
+            if (user) {
+                landingPage.style.display = 'none';
+                mainApp.style.display = 'block';
+
+                document.getElementById('user-name').innerText = user.displayName || "Người chơi";
+                document.getElementById('user-photo').src = user.photoURL || "https://via.placeholder.com/40";
+            } else {
+                landingPage.style.display = 'block';
+                mainApp.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
