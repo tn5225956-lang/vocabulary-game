@@ -977,8 +977,8 @@
 
             <div class="hero-text">
                 <h1>Educational games for everyone!</h1>
-                <button class="btn-3d btn-cyan btn-signup-main" onclick="loginWithGoogle()">Sign up</button>
-                <div class="subtext">🔊 Phát âm: ("Vocab-Master")</div>
+<button class="btn-3d btn-cyan btn-signup-main" onclick="window.location.href='login.html'">Sign up</button>
+<div class="subtext">🔊 Phát âm: ("Vocab-Master")</div>
             </div>
 
             <div class="hero-media">
@@ -1025,7 +1025,7 @@
         <section class="purple-banner">
             <h2>Học tập nghiêm túc. Vui chơi thỏa thích.</h2>
             <p>Tham gia cùng hàng triệu người học trên toàn thế giới khám phá Vocab Master!</p>
-            <button class="btn-3d btn-cyan" style="font-size: 18px; padding: 12px 30px; background: #ffffff; color: var(--vm-purple);" onclick="loginWithGoogle()">Sign up</button>
+            <button class="btn-3d btn-cyan" style="font-size: 18px; padding: 12px 30px; background: #ffffff; color: var(--vm-purple);" onclick="window.location.href='login.html'">Sign up</button>
         </section>
 
         <!-- HOW IT WORKS -->
@@ -1099,6 +1099,20 @@
 
     <!-- JOIN A GAME PAGE -->
     <div id="join-game-page">
+        <!-- HIỆU ỨNG NỀN BONG BÓNG MỜ MỜ SAU NỀN XANH -->
+        <div class="background-shapes">
+            <div class="floating-shape"></div>
+            <div class="floating-shape"></div>
+            <div class="floating-shape"></div>
+            <div class="floating-shape"></div>
+            <div class="floating-shape"></div>
+            <div class="floating-shape"></div>
+            <div class="floating-shape"></div>
+            <div class="floating-shape"></div>
+            <div class="floating-shape"></div>
+            <div class="floating-shape"></div>
+        </div>
+
         <header class="join-navbar">
             <div class="join-logo-text" onclick="goHome()">Vocab Master</div>
         </header>
@@ -1382,8 +1396,6 @@
         function loginWithGoogle() {
             if (window.location.protocol === 'file:') {
                 alert("Bạn đang mở file trực tiếp trên máy tính! Vui lòng đẩy code lên Netlify/GitHub (HTTPS) để đăng nhập Google hoạt động chính xác.");
-                // Cho phép test trực tiếp offline nếu cần bằng cách giả lập đăng nhập:
-                // onLoginSuccess({ displayName: "Test User", photoURL: "https://cdn-icons-png.flaticon.com/512/3408/3408506.png" });
                 return;
             }
 
@@ -1433,7 +1445,6 @@
             if (savedVocab) {
                 customVocab = JSON.parse(savedVocab);
             } else {
-                // Từ vựng mẫu mặc định nếu chưa thêm
                 customVocab = [
                     { en: "Apple", vi: "Quả táo", type: "noun" },
                     { en: "Run", vi: "Chạy", type: "verb" },
@@ -1699,7 +1710,6 @@
         function goToModeSelection() { showScreen('modeSelectScreen'); startBGM(); }
         function toggleSettingsMenu() { document.getElementById('settingsMenu').classList.toggle('active'); }
 
-        // Quản lý từ vựng modal
         function openVocabModal() {
             document.getElementById('settingsMenu').classList.remove('active');
             renderVocabRows();
@@ -1784,7 +1794,6 @@
             closeVocabModal();
         }
 
-        // Animals Game data & logic
         const masterAnimalStages = {
             easy: [
                 [{ name: "Duck", img: "https://api.iconify.design/noto:duck.svg" }, { name: "Koala", img: "https://api.iconify.design/noto:koala.svg" }, { name: "Dolphin", img: "https://api.iconify.design/noto:dolphin.svg" }],
@@ -1970,7 +1979,6 @@
             modal.classList.add("active");
         }
 
-        // Các chế độ học từ vựng khác
         let currentMode = 0, currentQuestion = 0, score = 0, currentWord = null;
         let wordQueue = [];
         const modeTitles = ["1. Anh → Việt", "2. Điền từ", "3. Gõ từ", "4. Từ loại", "5. Listening"];
